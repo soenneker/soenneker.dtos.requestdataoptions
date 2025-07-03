@@ -3,7 +3,7 @@
 /// <summary>
 /// A flexible request options object for paging, sorting, and filtering queryable data, similar to OData-style parameters.
 /// </summary>
-public class RequestDataOptions
+public sealed class RequestDataOptions
 {
     /// <summary>
     /// The zero-based index of the first item to return.
