@@ -1,45 +1,70 @@
-﻿using System.Text.Json.Serialization;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using Soenneker.Dtos.Filters.ExactMatch;
+using Soenneker.Dtos.Filters.Range;
+using Soenneker.Dtos.Options.OrderBy;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Soenneker.Dtos.RequestDataOptions;
 
 /// <summary>
-/// A flexible request options object for paging, sorting, and filtering queryable data, similar to OData-style parameters.
+/// Options for flexible, efficient, and explicit querying in Cosmos DB or similar repositories.
 /// </summary>
 public sealed class RequestDataOptions
 {
     /// <summary>
-    /// The zero-based index of the first item to return.
+    /// The zero-based index of the first item to return (for paging).
     /// </summary>
-    [JsonPropertyName("skip")]
     [JsonProperty("skip")]
+    [JsonPropertyName("skip")]
     public int? Skip { get; set; }
 
     /// <summary>
-    /// The number of items to return.
+    /// The number of items to return (for paging).
     /// </summary>
-    [JsonPropertyName("take")]
     [JsonProperty("take")]
+    [JsonPropertyName("take")]
     public int? Take { get; set; }
 
     /// <summary>
-    /// The sort expression, e.g., "Name asc" or "CreatedAt desc".
+    /// List of sort instructions, in priority order.
     /// </summary>
-    [JsonPropertyName("orderBy")]
     [JsonProperty("orderBy")]
-    public string? OrderBy { get; set; }
+    [JsonPropertyName("orderBy")]
+    public List<OrderByOption>? OrderBy { get; set; }
 
     /// <summary>
     /// Whether to include the total count in the response (for pagination).
     /// </summary>
-    [JsonPropertyName("includeCount")]
     [JsonProperty("includeCount")]
+    [JsonPropertyName("includeCount")]
     public bool? IncludeCount { get; set; }
 
     /// <summary>
-    /// The search term to filter results, e.g., "search term".
+    /// The search term to filter results (applied to <see cref="SearchFields"/>).
     /// </summary>
-    [JsonPropertyName("search")]
     [JsonProperty("search")]
+    [JsonPropertyName("search")]
     public string? Search { get; set; }
+
+    /// <summary>
+    /// The list of fields to apply the Search term to (must be string properties).
+    /// </summary>
+    [JsonProperty("searchFields")]
+    [JsonPropertyName("searchFields")]
+    public List<string>? SearchFields { get; set; }
+
+    /// <summary>
+    /// Key-value exact match filters (e.g., Status = Active).
+    /// </summary>
+    [JsonProperty("filters")]
+    [JsonPropertyName("filters")]
+    public List<ExactMatchFilter>? Filters { get; set; }
+
+    /// <summary>
+    /// Advanced range-based filters (e.g., Price > 50 and Price &lt;= 200).
+    /// </summary>
+    [JsonProperty("rangeFilters")]
+    [JsonPropertyName("rangeFilters")]
+    public List<RangeFilter>? RangeFilters { get; set; }
 }

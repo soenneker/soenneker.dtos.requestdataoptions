@@ -42,6 +42,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+      <PackageReference Include="Soenneker.Dtos.Filters.ExactMatch" Version="3.0.1" />
+      <PackageReference Include="Soenneker.Dtos.Filters.Range" Version="3.0.1" />
+      <PackageReference Include="Soenneker.Dtos.Options.OrderBy" Version="3.0.1" />
     </ItemGroup>
 </Project>
