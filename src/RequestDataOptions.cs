@@ -13,18 +13,20 @@ namespace Soenneker.Dtos.RequestDataOptions;
 public sealed class RequestDataOptions
 {
     /// <summary>
-    /// The zero-based index of the first item to return (for paging).
+    /// Maximum items to return in one page
     /// </summary>
-    [JsonProperty("skip")]
-    [JsonPropertyName("skip")]
-    public int? Skip { get; set; }
+    [JsonProperty("pageSize")]
+    [JsonPropertyName("pageSize")]
+    public int PageSize { get; set; }
 
     /// <summary>
-    /// The number of items to return (for paging).
+    /// Opaque Cosmos DB continuation token.  
+    /// ‑ <see langword="null"/> on the **first** request.  
+    /// ‑ Client must echo back the <c>NextToken</c> it received from the previous page.
     /// </summary>
-    [JsonProperty("take")]
-    [JsonPropertyName("take")]
-    public int? Take { get; set; }
+    [JsonProperty("continuationToken")]
+    [JsonPropertyName("continuationToken")]
+    public string? ContinuationToken { get; set; }
 
     /// <summary>
     /// List of sort instructions, in priority order.
