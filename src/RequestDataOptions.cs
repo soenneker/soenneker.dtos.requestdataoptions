@@ -4,12 +4,14 @@ using Soenneker.Dtos.Filters.Range;
 using Soenneker.Dtos.Options.OrderBy;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using Soenneker.Attributes.PublicOpenApiObject;
 
 namespace Soenneker.Dtos.RequestDataOptions;
 
 /// <summary>
 /// Options for flexible, efficient, and explicit querying in Cosmos DB or similar repositories.
 /// </summary>
+[PublicOpenApiObject]
 public sealed class RequestDataOptions
 {
     /// <summary>
