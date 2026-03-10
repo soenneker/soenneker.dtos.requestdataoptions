@@ -41,7 +41,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Soenneker.Dtos.Filters.ExactMatch" Version="4.0.22" />
+      <PackageReference Include="Soenneker.Dtos.Filters.ExactMatch" Version="4.0.25" />
       <PackageReference Include="Soenneker.Dtos.Filters.Range" Version="4.0.23" />
       <PackageReference Include="Soenneker.Dtos.Options.OrderBy" Version="4.0.28" />
     </ItemGroup>
