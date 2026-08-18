@@ -9,64 +9,62 @@ using Soenneker.Attributes.PublicOpenApiObject;
 namespace Soenneker.Dtos.RequestDataOptions;
 
 /// <summary>
-/// Options for flexible, efficient, and explicit querying in Cosmos DB or similar repositories.
+/// Defines cursor pagination, sorting, search, exact-match filters, and range filters for a structured API query.
 /// </summary>
 [PublicOpenApiObject]
 public sealed class RequestDataOptions
 {
     /// <summary>
-    /// Maximum items to return in one page
+    /// Maximum number of items requested for one page; the server may enforce a lower maximum or apply a default.
     /// </summary>
     [JsonProperty("pageSize")]
     [JsonPropertyName("pageSize")]
     public int PageSize { get; set; }
 
     /// <summary>
-    /// Opaque Cosmos DB continuation token.  
-    /// ‑ <see langword="null"/> on the **first** request.  
-    /// ‑ Client must echo back the <c>NextToken</c> it received from the previous page.
+    /// Opaque cursor returned by the previous paged response; omit it when requesting the first page and do not parse or modify it.
     /// </summary>
     [JsonProperty("continuationToken")]
     [JsonPropertyName("continuationToken")]
     public string? ContinuationToken { get; set; }
 
     /// <summary>
-    /// List of sort instructions, in priority order.
+    /// Sort instructions applied in priority order, with the first entry acting as the primary sort.
     /// </summary>
     [JsonProperty("orderBy")]
     [JsonPropertyName("orderBy")]
     public List<OrderByOption>? OrderBy { get; set; }
 
     /// <summary>
-    /// Whether to include the total count in the response (for pagination).
+    /// Whether the response should include the total number of matching records; counting may increase query cost or latency.
     /// </summary>
     [JsonProperty("includeCount")]
     [JsonPropertyName("includeCount")]
     public bool? IncludeCount { get; set; }
 
     /// <summary>
-    /// The search term to filter results (applied to <see cref="SearchFields"/>).
+    /// Free-text search term applied to the configured <see cref="SearchFields"/>.
     /// </summary>
     [JsonProperty("search")]
     [JsonPropertyName("search")]
     public string? Search { get; set; }
 
     /// <summary>
-    /// The list of fields to apply the Search term to (must be string properties).
+    /// Serializable string field names searched for <see cref="Search"/>; supported names are determined by the queried resource.
     /// </summary>
     [JsonProperty("searchFields")]
     [JsonPropertyName("searchFields")]
     public List<string>? SearchFields { get; set; }
 
     /// <summary>
-    /// Key-value exact match filters (e.g., Status = Active).
+    /// Exact-match conditions that require each named field to equal its supplied value.
     /// </summary>
     [JsonProperty("filters")]
     [JsonPropertyName("filters")]
     public List<ExactMatchFilter>? Filters { get; set; }
 
     /// <summary>
-    /// Advanced range-based filters (e.g., Price > 50 and Price &lt;= 200).
+    /// Range conditions that constrain comparable fields with inclusive or exclusive lower and upper bounds.
     /// </summary>
     [JsonProperty("rangeFilters")]
     [JsonPropertyName("rangeFilters")]
