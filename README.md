@@ -5,7 +5,7 @@
 
 # Soenneker.Dtos.RequestDataOptions
 
-Defines cursor pagination, sorting, search, exact-match filters, and range filters for a structured API query.
+A shared request DTO for cursor pagination, multi-field sorting, free-text search, exact-match filters, and range filters. It defines the wire shape; the receiving API decides which fields and limits are valid.
 
 ## Install
 
@@ -13,19 +13,47 @@ Defines cursor pagination, sorting, search, exact-match filters, and range filte
 dotnet add package Soenneker.Dtos.RequestDataOptions
 ```
 
-## What you get
+## Build a query request
 
-- `RequestDataOptions` — Defines cursor pagination, sorting, search, exact-match filters, and range filters for a structured API query.
+```csharp
+using Soenneker.Dtos.Filters.ExactMatch;
+using Soenneker.Dtos.Filters.Range;
+using Soenneker.Dtos.Options.OrderBy;
+using Soenneker.Dtos.RequestDataOptions;
+using Soenneker.Enums.SortDirections;
 
-## API at a glance
+var options = new RequestDataOptions
+{
+    PageSize = 50,
+    IncludeCount = true,
+    Search = "paid",
+    SearchFields = ["description", "reference"],
+    OrderBy =
+    [
+        new OrderByOption { Field = "createdAt", Direction = SortDirection.Desc },
+        new OrderByOption { Field = "id", Direction = SortDirection.Asc }
+    ],
+    Filters =
+    [
+        new ExactMatchFilter { Field = "status", Value = "active" }
+    ],
+    RangeFilters =
+    [
+        new RangeFilter { Field = "total", GreaterThanOrEqual = 25m, LessThan = 500m }
+    ]
+};
+```
 
-| API | What it does | Result / important behavior |
-| --- | --- | --- |
-| `RequestDataOptions.PageSize` | Maximum number of items requested for one page; the server may enforce a lower maximum or apply a default. | Maximum number of items requested for one page; the server may enforce a lower maximum or apply a default. |
-| `RequestDataOptions.ContinuationToken` | Opaque cursor returned by the previous paged response; omit it when requesting the first page and do not parse or modify it. | Opaque cursor returned by the previous paged response; omit it when requesting the first page and do not parse or modify it. |
-| `RequestDataOptions.OrderBy` | Sort instructions applied in priority order, with the first entry acting as the primary sort. | Sort instructions applied in priority order, with the first entry acting as the primary sort. |
-| `RequestDataOptions.IncludeCount` | Whether the response should include the total number of matching records; counting may increase query cost or latency. | Whether the response should include the total number of matching records; counting may increase query cost or latency. |
-| `RequestDataOptions.Search` | Free-text search term applied to the configured `SearchFields`. | Free-text search term applied to the configured `SearchFields`. |
-| `RequestDataOptions.SearchFields` | Serializable string field names searched for `Search`; supported names are determined by the queried resource. | Serializable string field names searched for `Search`; supported names are determined by the queried resource. |
-| `RequestDataOptions.Filters` | Exact-match conditions that require each named field to equal its supplied value. | Exact-match conditions that require each named field to equal its supplied value. |
-| `RequestDataOptions.RangeFilters` | Range conditions that constrain comparable fields with inclusive or exclusive lower and upper bounds. | Range conditions that constrain comparable fields with inclusive or exclusive lower and upper bounds. |
+`OrderBy` entries are sent in list order, allowing the server to treat the first as the primary sort. Range filters expose exclusive (`GreaterThan`, `LessThan`) and inclusive (`GreaterThanOrEqual`, `LessThanOrEqual`) bounds.
+
+For the next page, copy the continuation token returned by the API without parsing or changing it:
+
+```csharp
+options.ContinuationToken = continuationTokenFromResponse;
+```
+
+## Server-side responsibilities
+
+This type does not enforce a positive or maximum `PageSize`, interpret filters, escape search syntax, or verify field names. A server consuming it should allow-list sortable, searchable, and filterable fields; parameterize values; cap page size; and reject unsupported combinations. `IncludeCount` may make a query materially more expensive, so the server remains free to ignore or restrict it.
+
+Nullable members are serialized or omitted according to the configured `System.Text.Json` or Newtonsoft.Json options.
