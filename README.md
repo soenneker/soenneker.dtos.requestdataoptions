@@ -56,4 +56,4 @@ options.ContinuationToken = continuationTokenFromResponse;
 
 This type does not enforce a positive or maximum `PageSize`, interpret filters, escape search syntax, or verify field names. A server consuming it should allow-list sortable, searchable, and filterable fields; parameterize values; cap page size; and reject unsupported combinations. `IncludeCount` may make a query materially more expensive, so the server remains free to ignore or restrict it.
 
-Nullable members are serialized or omitted according to the configured `System.Text.Json` or Newtonsoft.Json options.
+Nullable members are serialized or omitted according to the configured `System.Text.Json` options.
