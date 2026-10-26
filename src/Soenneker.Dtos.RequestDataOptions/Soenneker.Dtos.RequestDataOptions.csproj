@@ -45,8 +45,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Soenneker.Dtos.Filters.ExactMatch" Version="11.0.82" />
-        <PackageReference Include="Soenneker.Dtos.Filters.Range" Version="4.0.78" />
-        <PackageReference Include="Soenneker.Dtos.Options.OrderBy" Version="4.0.95" />
+        <PackageReference Include="Soenneker.Dtos.Filters.ExactMatch" Version="11.0.83" />
+        <PackageReference Include="Soenneker.Dtos.Filters.Range" Version="11.0.80" />
+        <PackageReference Include="Soenneker.Dtos.Options.OrderBy" Version="11.0.97" />
     </ItemGroup>
 </Project>
